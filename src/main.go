@@ -1,17 +1,13 @@
 package main
 
 import (
-	"Go-Session-Clustering/src/session"
-	"fmt"
-	"net/http"
+	"Go-Session-Clustering/src/www"
+
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	http.HandleFunc("/find", session.Find)
-	http.HandleFunc("/login", session.Login)
-	http.HandleFunc("/logout", session.Logout)
-
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		fmt.Println(err)
-	}
+	e := echo.New()
+	www.Register(e)
+	www.StartUp(e)
 }
