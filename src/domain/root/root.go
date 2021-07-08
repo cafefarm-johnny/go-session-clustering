@@ -18,7 +18,7 @@ func Root(c echo.Context) error {
 		Path:     "/",
 		Domain:   "localhost",
 		MaxAge:   86400 * 7, // 7일
-		Secure:   true,
+		Secure:   false,
 		HttpOnly: true,
 		SameSite: http.SameSiteDefaultMode,
 	}
