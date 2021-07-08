@@ -26,6 +26,8 @@ func StartUp(e *echo.Echo) {
 		session.Middleware(sessions.NewCookieStore([]byte("secret"))),
 	)
 
+	e.Validator = newArgumentValidator()
+
 	if err := e.Start(port); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

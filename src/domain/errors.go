@@ -7,6 +7,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// 400
+var (
+	ErrBadRequest = echo.NewHTTPError(
+		http.StatusBadRequest,
+		NewDomainErr(400001, "잘못된 요청입니다."),
+	)
+)
+
+// 401
 var (
 	ErrDuplicatedUser = echo.NewHTTPError(
 		http.StatusUnauthorized,
