@@ -2,6 +2,7 @@ package www
 
 import (
 	"Go-Session-Clustering/src/domain/root"
+	users2 "Go-Session-Clustering/src/domain/users"
 
 	"github.com/labstack/echo/v4"
 )
@@ -17,7 +18,8 @@ func index(e *echo.Echo) {
 }
 
 func users(e *echo.Echo) {
-	uc := users.NewUserController()
+	uc := users2.NewUserController()
 	e.POST("/users", uc.Signup)
+	e.POST("/users/signin", uc.Signin)
 	e.POST("/users/self-authenticate", uc.SelfAuthenticate)
 }

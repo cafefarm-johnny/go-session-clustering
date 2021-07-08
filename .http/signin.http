@@ -1,0 +1,9 @@
+POST http://localhost:8080/users/signin
+Content-Type: application/json
+X-CSRF-Token: {{csrf}}
+Cookie: _csrf={{csrf}}
+
+{
+  "username": "johnny",
+  "password": "j1234"
+}
