@@ -5,10 +5,3 @@ type UserDTO struct {
 	Username string `json:"username" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
-
-func (u *UserDTO) ToUser() *User {
-	return &User{
-		Username: u.Username,
-		Password: u.Password,
-	}
-}

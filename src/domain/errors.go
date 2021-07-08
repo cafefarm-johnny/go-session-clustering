@@ -11,7 +11,7 @@ import (
 var (
 	ErrBadRequest = echo.NewHTTPError(
 		http.StatusBadRequest,
-		NewDomainErr(400001, "잘못된 요청입니다."),
+		newDomainErr(400001, "잘못된 요청입니다."),
 	)
 )
 
@@ -19,7 +19,15 @@ var (
 var (
 	ErrDuplicatedUser = echo.NewHTTPError(
 		http.StatusUnauthorized,
-		NewDomainErr(401001, "이미 존재하는 회원입니다."),
+		newDomainErr(401001, "이미 존재하는 회원입니다."),
+	)
+)
+
+// 500
+var (
+	ErrInternalServerError = echo.NewHTTPError(
+		http.StatusInternalServerError,
+		newDomainErr(500001, "알 수 없는 에러가 발생하였습니다."),
 	)
 )
 
@@ -33,7 +41,7 @@ func (d *domainErr) Error() string {
 	return fmt.Sprintf("{ code: %d, message: %s }", d.Code, d.Message)
 }
 
-func NewDomainErr(code int, message string) *domainErr {
+func newDomainErr(code int, message string) *domainErr {
 	return &domainErr{
 		code,
 		message,

@@ -6,7 +6,7 @@ import (
 	"Go-Session-Clustering/src/domain/user/model"
 )
 
-func saveUser(username, password string) error {
+func saveUser(username string, password []byte) error {
 	u := model.CreateUser(username, password)
 	if db.Exist(u) {
 		return domain.ErrDuplicatedUser
