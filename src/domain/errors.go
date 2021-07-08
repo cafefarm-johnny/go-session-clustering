@@ -21,6 +21,18 @@ var (
 		http.StatusUnauthorized,
 		newDomainErr(401001, "이미 존재하는 회원입니다."),
 	)
+	ErrInvalidPassword = echo.NewHTTPError(
+		http.StatusUnauthorized,
+		newDomainErr(401002, "패스워드가 일치하지 않습니다."),
+	)
+)
+
+// 404
+var (
+	ErrNotFoundUser = echo.NewHTTPError(
+		http.StatusNotFound,
+		newDomainErr(404001, "존재하지 않는 회원입니다."),
+	)
 )
 
 // 500

@@ -8,7 +8,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Root(c echo.Context) error {
+type rootController struct {
+}
+
+func NewRootController() *rootController {
+	return &rootController{}
+}
+
+func (rc *rootController) Root(c echo.Context) error {
 	sess, err := session.Get("my-session", c)
 	if err != nil {
 		return err

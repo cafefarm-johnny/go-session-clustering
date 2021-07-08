@@ -13,9 +13,12 @@ func Register(e *echo.Echo) {
 }
 
 func index(e *echo.Echo) {
-	e.GET("/", root.Root)
+	rc := root.NewRootController()
+	e.GET("/", rc.Root)
 }
 
 func users(e *echo.Echo) {
-	e.POST("/users", user.Signup)
+	uc := user.NewUserController()
+	e.POST("/users", uc.Signup)
+	e.POST("/users/self-authenticate", uc.SelfAuthenticate)
 }

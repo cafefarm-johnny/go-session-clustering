@@ -7,7 +7,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Signup(c echo.Context) error {
+type userController struct {
+	us *UserService
+}
+
+func NewUserController() *userController {
+	return &userController{
+		us: NewUserService(),
+	}
+}
+
+func (uc *userController) Signup(c echo.Context) error {
 	dto := new(model.UserDTO)
 	if err := c.Bind(dto); err != nil {
 		return err
@@ -17,9 +27,26 @@ func Signup(c echo.Context) error {
 		return err
 	}
 
-	if err := signup(dto); err != nil {
+	if err := uc.us.Signup(dto); err != nil {
 		return err
 	}
 
 	return c.String(http.StatusCreated, "회원 가입 성공")
+}
+
+func (uc *userController) SelfAuthenticate(c echo.Context) error {
+	dto := new(model.UserDTO)
+	if err := c.Bind(dto); err != nil {
+		return err
+	}
+
+	if err := c.Validate(dto); err != nil {
+		return err
+	}
+
+	if err := uc.us.SelfAuthenticate(dto); err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }
