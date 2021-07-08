@@ -1,8 +1,8 @@
-package user
+package users
 
 import (
 	"Go-Session-Clustering/src/domain"
-	"Go-Session-Clustering/src/domain/user/model"
+	"Go-Session-Clustering/src/domain/users/model"
 	"Go-Session-Clustering/src/hash"
 )
 

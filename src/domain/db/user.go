@@ -1,6 +1,6 @@
 package db
 
-import "Go-Session-Clustering/src/domain/user/model"
+import "Go-Session-Clustering/src/domain/users/model"
 
 // UserStore just public for type
 type UserStore struct {

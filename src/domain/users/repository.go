@@ -1,9 +1,9 @@
-package user
+package users
 
 import (
 	"Go-Session-Clustering/src/domain"
 	"Go-Session-Clustering/src/domain/db"
-	"Go-Session-Clustering/src/domain/user/model"
+	"Go-Session-Clustering/src/domain/users/model"
 )
 
 type userRepository struct {
