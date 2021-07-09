@@ -67,3 +67,11 @@ func (uc *userController) SelfAuthenticate(ctx echo.Context) error {
 
 	return ctx.NoContent(http.StatusNoContent)
 }
+
+func (uc *userController) Logout(ctx echo.Context) error {
+	if err := uc.us.Logout(ctx); err != nil {
+		return err
+	}
+
+	return ctx.String(http.StatusOK, "로그아웃 성공")
+}

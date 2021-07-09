@@ -25,6 +25,10 @@ var (
 		http.StatusUnauthorized,
 		newDomainErr(401002, "패스워드가 일치하지 않습니다."),
 	)
+	ErrUnauthorized = echo.NewHTTPError(
+		http.StatusUnauthorized,
+		newDomainErr(401003, "로그인 후 시도해주세요."),
+	)
 )
 
 // 403
@@ -32,6 +36,10 @@ var (
 	ErrDuplicatedLogin = echo.NewHTTPError(
 		http.StatusForbidden,
 		newDomainErr(403001, "중복 로그인 요청입니다."),
+	)
+	ErrForbidden = echo.NewHTTPError(
+		http.StatusForbidden,
+		newDomainErr(403002, "잘못된 접근입니다."),
 	)
 )
 

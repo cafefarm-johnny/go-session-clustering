@@ -23,4 +23,5 @@ func users(e *echo.Echo) {
 	g.POST("/users/signup", uc.Signup)
 	g.POST("/users/signin", uc.Signin)
 	g.POST("/users/self-authenticate", uc.SelfAuthenticate)
+	g.GET("/users/logout", uc.Logout)
 }

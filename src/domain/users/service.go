@@ -81,6 +81,25 @@ func (us *UserService) SelfAuthenticate(dto *model.UserDTO) error {
 	return nil
 }
 
+func (us *UserService) Logout(ctx echo.Context) error {
+	sess, err := session.Get(domain.SessionName, ctx)
+	if err != nil {
+		ctx.Logger().Error(err)
+		return domain.ErrForbidden
+	}
+	if !hasSession(sess) {
+		return domain.ErrUnauthorized
+	}
+
+	sess.Values[domain.SessionKey] = ""
+	if err := sess.Save(ctx.Request(), ctx.Response()); err != nil {
+		ctx.Logger().Error(err)
+		return domain.ErrInternalServerError
+	}
+
+	return nil
+}
+
 func hasSession(sess *sessions.Session) bool {
 	if sess.Values[domain.SessionKey] == nil {
 		return false
