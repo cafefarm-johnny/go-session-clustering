@@ -17,47 +17,47 @@ func NewUserController() *userController {
 	}
 }
 
-func (uc *userController) Signup(c echo.Context) error {
+func (uc *userController) Signup(ctx echo.Context) error {
 	dto := model.NewUserDTO()
-	if err := c.Bind(dto); err != nil {
+	if err := ctx.Bind(dto); err != nil {
 		return err
 	}
 
-	if err := c.Validate(dto); err != nil {
+	if err := ctx.Validate(dto); err != nil {
 		return err
 	}
 
-	if err := uc.us.Signup(dto); err != nil {
+	if err := uc.us.Signup(ctx, dto); err != nil {
 		return err
 	}
 
-	return c.String(http.StatusCreated, "회원 가입 성공")
+	return ctx.String(http.StatusCreated, "회원 가입 성공")
 }
 
-func (uc *userController) Signin(c echo.Context) error {
+func (uc *userController) Signin(ctx echo.Context) error {
 	dto := model.NewUserDTO()
-	if err := c.Bind(dto); err != nil {
+	if err := ctx.Bind(dto); err != nil {
 		return err
 	}
 
-	if err := c.Validate(dto); err != nil {
+	if err := ctx.Validate(dto); err != nil {
 		return err
 	}
 
-	if err := uc.us.Signin(c, dto); err != nil {
+	if err := uc.us.Signin(ctx, dto); err != nil {
 		return err
 	}
 
-	return c.String(http.StatusOK, "로그인 성공")
+	return ctx.String(http.StatusOK, "로그인 성공")
 }
 
-func (uc *userController) SelfAuthenticate(c echo.Context) error {
+func (uc *userController) SelfAuthenticate(ctx echo.Context) error {
 	dto := model.NewUserDTO()
-	if err := c.Bind(dto); err != nil {
+	if err := ctx.Bind(dto); err != nil {
 		return err
 	}
 
-	if err := c.Validate(dto); err != nil {
+	if err := ctx.Validate(dto); err != nil {
 		return err
 	}
 
@@ -65,5 +65,5 @@ func (uc *userController) SelfAuthenticate(c echo.Context) error {
 		return err
 	}
 
-	return c.NoContent(http.StatusNoContent)
+	return ctx.NoContent(http.StatusNoContent)
 }

@@ -27,6 +27,14 @@ var (
 	)
 )
 
+// 403
+var (
+	ErrDuplicatedLogin = echo.NewHTTPError(
+		http.StatusForbidden,
+		newDomainErr(403001, "중복 로그인 요청입니다."),
+	)
+)
+
 // 404
 var (
 	ErrNotFoundUser = echo.NewHTTPError(

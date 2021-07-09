@@ -22,15 +22,25 @@ func NewUserService() *UserService {
 	}
 }
 
-func (us *UserService) Signup(dto *model.UserDTO) error {
+func (us *UserService) Signup(ctx echo.Context, dto *model.UserDTO) error {
 	hashPwd, err := hash.ToBcrypt(dto.Password)
 	if err != nil {
+		ctx.Logger().Error("Signup: password encrypt: ", err)
 		return domain.ErrInternalServerError
 	}
 	return us.ur.Save(dto.Username, hashPwd)
 }
 
-func (us *UserService) Signin(c echo.Context, dto *model.UserDTO) error {
+func (us *UserService) Signin(ctx echo.Context, dto *model.UserDTO) error {
+	sess, err := session.Get(domain.SessionName, ctx)
+	if err != nil {
+		ctx.Logger().Error("Signin: get session: ", err)
+		return domain.ErrInternalServerError
+	}
+	if hasSession(sess) {
+		return domain.ErrDuplicatedLogin
+	}
+
 	u := us.ur.Find(dto.Username)
 	if u == nil {
 		return domain.ErrNotFoundUser
@@ -40,34 +50,22 @@ func (us *UserService) Signin(c echo.Context, dto *model.UserDTO) error {
 		return domain.ErrInvalidPassword
 	}
 
-	// save session
-	return func(c echo.Context, u model.User) error {
-		sess, err := session.Get("my-session", c)
-		if err != nil {
-			return err
-		}
+	sess.Options = &sessions.Options{
+		Path:     "/",
+		Domain:   "localhost",
+		MaxAge:   86400 * 7, // 7일
+		Secure:   false,
+		HttpOnly: true,
+		SameSite: http.SameSiteDefaultMode,
+	}
 
-		// 세션 존재 여부에 따라 중복 로그인 처리
-		if sess != nil {
-			return nil
-		}
+	sess.Values[domain.SessionKey] = domain.NewSession(u.UUID, u.Username)
+	if err = sess.Save(ctx.Request(), ctx.Response()); err != nil {
+		ctx.Logger().Error("Signin: session create: ", err)
+		return domain.ErrInternalServerError
+	}
 
-		sess.Options = &sessions.Options{
-			Path:     "/",
-			Domain:   "localhost",
-			MaxAge:   86400 * 7, // 7일
-			Secure:   false,
-			HttpOnly: true,
-			SameSite: http.SameSiteDefaultMode,
-		}
-
-		sess.Values["client"] = model.NewSession(u.UUID, u.Username)
-		if err = sess.Save(c.Request(), c.Response()); err != nil {
-			return err
-		}
-
-		return nil
-	}(c, *u)
+	return nil
 }
 
 func (us *UserService) SelfAuthenticate(dto *model.UserDTO) error {
@@ -81,4 +79,11 @@ func (us *UserService) SelfAuthenticate(dto *model.UserDTO) error {
 	}
 
 	return nil
+}
+
+func hasSession(sess *sessions.Session) bool {
+	if sess.Values[domain.SessionKey] == nil {
+		return false
+	}
+	return true
 }
