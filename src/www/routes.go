@@ -19,7 +19,8 @@ func index(e *echo.Echo) {
 
 func users(e *echo.Echo) {
 	uc := users2.NewUserController()
-	e.POST("/users", uc.Signup)
-	e.POST("/users/signin", uc.Signin)
-	e.POST("/users/self-authenticate", uc.SelfAuthenticate)
+	g := e.Group("/api/v1")
+	g.POST("/users/signup", uc.Signup)
+	g.POST("/users/signin", uc.Signin)
+	g.POST("/users/self-authenticate", uc.SelfAuthenticate)
 }
