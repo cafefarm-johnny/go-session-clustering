@@ -19,11 +19,14 @@ const (
 
 func StartUp(e *echo.Echo) {
 	e.Use(
+		middleware.BodyDump(bodyDump),
+		middleware.BodyLimit("2M"),
 		middleware.CSRF(),
 		middleware.Gzip(),
 		middleware.LoggerWithConfig(loggerConfig()),
 		middleware.RequestID(),
 		middleware.Recover(),
+		middleware.Secure(),
 		middleware.TimeoutWithConfig(timeoutConfig()),
 		session.Middleware(sessionCookieStore()),
 	)
@@ -34,6 +37,10 @@ func StartUp(e *echo.Echo) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+func bodyDump(ctx echo.Context, reqBody, resBody []byte) {
+	ctx.Logger().Print("dump: ", string(reqBody))
 }
 
 func loggerConfig() middleware.LoggerConfig {
@@ -47,7 +54,7 @@ func loggerConfig() middleware.LoggerConfig {
 			"path: \"${path}\" \n    " +
 			"status: ${status} \n    " +
 			"error: \"${error}\" \n" +
-			"}",
+			"} \n",
 	}
 }
 
